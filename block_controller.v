@@ -1,13 +1,3 @@
-`timescale 1ns / 1ps
-
-//////////////////////////////////////////////////////////////////////////////////
-// Engineer: Walid Al-Muhtaseb
-// 
-// Create Date: 12/4/2025 01:54:30 PM
-// Design Name: Accelerator Top Module
-// Module Name: top
-//////////////////////////////////////////////////////////////////////////////////
-
 module block_controller(
 	input clk, //this clock must be a slow enough clock to view the changing positions of the objects
 	input bright,
@@ -15,28 +5,16 @@ module block_controller(
 	input up, input down, input left, input right,
 	input [9:0] hCount, vCount,
 	input [14:0] acl_data, //this is the accelerometer data, but it is not used in this example
-	output reg [11:0] rgb,
+	output wire block_fill,
+	output reg [9:0] xpos, ypos,
 	output reg [11:0] background
    );
-	wire block_fill;
 	
 	//these two values dictate the center of the block, incrementing and decrementing them leads the block to move in certain directions
-	reg [9:0] xpos, ypos;
-	
-	parameter RED   = 12'b1111_0000_0000;
-	
-	/*when outputting the rgb value in an always block like this, make sure to include the if(~bright) statement, as this ensures the monitor 
-	will output some data to every pixel and not just the images you are trying to display*/
-	always@ (*) begin
-    	if(~bright )	//force black if not inside the display area
-			rgb = 12'b0000_0000_0000;
-		else if (block_fill) 
-			rgb = RED; 
-		else	
-			rgb=background;
-	end
-		//the +-5 for the positions give the dimension of the block (i.e. it will be 10x10 pixels)
-	assign block_fill=vCount>=(ypos-5) && vCount<=(ypos+5) && hCount>=(xpos-5) && hCount<=(xpos+5);
+	parameter RED   = 12'hF44;  // parameter BALL = 12'hF44; // Vivid red-orange      parameter RED   = 12'b1111_0000_0000;  
+
+	//the +-10 for the positions give the dimension of the block (i.e. it will be 20x20 pixels)
+	assign block_fill = vCount>=(ypos-10) && vCount<=(ypos+10) && hCount>=(xpos-10) && hCount<=(xpos+10);
 	
 	always@(posedge clk, posedge rst) 
 	begin
@@ -74,8 +52,6 @@ module block_controller(
 				end
 			end
 
-
-
 			if(up) begin   /// done
 				if(acl_data[8:5] > 4'b0100)
 					begin
@@ -87,8 +63,6 @@ module block_controller(
 				if(ypos<=34) //these are rough values to attempt looping around, you can fine-tune them to make it more accurate- refer to the block comment above
 					ypos<=514;
 			end
-
-
 
 			else if(down) begin  // done 
 				if(acl_data[8:5] > 4'b1100)
@@ -102,8 +76,6 @@ module block_controller(
 					ypos<=34;
 			end
 
-
-
 			// if its in a certain radius dont move x< 3 and y< 3 do nothing 4b`0011
 			if( (acl_data[13:10] < 4'b0010) || (acl_data[13:10] > 4'b1110) ) begin
 				xpos <= xpos;
@@ -111,27 +83,15 @@ module block_controller(
 			if( acl_data[9:5] < 4'b0010) begin
 				ypos <= ypos;
 			end
-
-			/*		
-	wire [3:0] x_data, y_data, z_data;
-    assign x_data = acl_data[13:10];
-    assign y_data = acl_data[8:5];
-    assign z_data = acl_data[3:0];
-			*/
 		end
 	end
 	
-
-
-
-	//the background color reflects the most recent button press
+	//the background color 
 	always@(posedge clk, posedge rst) begin
 		if(rst)
-				background <= 12'b1111_1111_1111;
+				background <= 12'hFED;  // 12'b1111_1111_1111;
 		else
-			background <= 12'b1111_1111_1111;
+			background <= 12'hFED;  // parameter BACKGROUND = 12'hFED; // Light peach/beige    // 12'b1111_1111_1111;
 	end
-
-	
 	
 endmodule

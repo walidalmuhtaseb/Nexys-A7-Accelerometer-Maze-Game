@@ -2,7 +2,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: Walid Al-Muhtaseb
-// 
+//      #################### keep the same name as the other file #################
 // Create Date:    4.17.2025 01:54:30 PM 
 // Design Name: 
 // Module Name:    DisplayController 
@@ -24,7 +24,7 @@ module display_controller(
 	output reg[9:0] hCount, 
 	output reg [9:0] vCount // Covers 800, width of the screen, because it's 2^10
 	);
-	
+
 	reg pulse;
 	reg clk25;
 	

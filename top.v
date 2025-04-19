@@ -89,10 +89,13 @@ module merged_top(
     end
     wire move_clk = div_counter[19];
 
-    // RGB color output
+    // RGB color output and block controller signals
     wire [11:0] rgb;
     wire [11:0] background;
+    wire [9:0] xpos, ypos;
+    wire block_fill;
 
+    // Block controller
     block_controller block_ctrl (
         .acl_data(acl_data),
         .clk(move_clk),
@@ -102,10 +105,23 @@ module merged_top(
         .down(move_down),
         .left(move_left),
         .right(move_right),
-        .hCount(hCount),
+        .hCount(hCount), 
         .vCount(vCount),
-        .rgb(rgb),
+        .block_fill(block_fill),
+        .xpos(xpos),
+        .ypos(ypos),
         .background(background)
+    );
+
+    // Pixel generator
+    pixel_gen pg (
+        .bright(bright),
+        .x(hCount),
+        .y(vCount),
+        .xpos(xpos),
+        .ypos(ypos),
+        .block_fill(block_fill),
+        .rgb(rgb)
     );
 
     // VGA color mapping
