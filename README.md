@@ -1,5 +1,4 @@
-﻿# Nexys-A7-Maze-GamE
-
+﻿# Nexys-A7-Maze-Game
 
 Nexys A7 Accelerometer Maze Game
 Overview
@@ -20,13 +19,11 @@ Player position shown on 7-segment display
 LED debugging output for accelerometer values
 
 
-
 Game Mechanics:
 Tilt the board to move the player (red block) through the maze
 Navigate around walls (gray blocks)
 Reach the purple goal block to win
-After winning, the maze will transform to display a "YOU WIN" pattern in USC Cardinal and Gold colors
-
+After winning, the maze will transform to display a "GO SC" pattern in USC Cardinal and Gold colors
 
 
 Module Structure:
@@ -40,14 +37,12 @@ seg7_control.v: Controls the 7-segment display
 sprite_rom.v: Stores image data for the game graphics
 
 
-
 Implementation Details:
 The accelerometer data is processed to control the player's movement
 Collision detection prevents the player from moving through walls
 A victory condition is triggered when the player reaches the goal
 The VGA display shows the game state in real-time
 The 7-segment display shows the current accelerometer readings
-
 
 
 Controls:
@@ -58,7 +53,6 @@ Tilt Left: Move player left
 Tilt Right: Move player right
 
 
-
 Color Scheme
 The game uses the following colors:
 Walls: Gray (12'h666)
@@ -66,7 +60,6 @@ Player: Red (12'hF44)
 Goal: Purple (12'hC0F)
 Background: Dark Gray (12'h333)
 Victory Colors: USC Cardinal (12'h900) and USC Gold (12'hFC3)
-
 
 
 Installation and Setup:
@@ -80,8 +73,9 @@ Enjoy the game!
 
 Author:
 Walid Al-Muhtaseb
-Creation Date
-4, 20,2025
+Sprite Creator:
+Roman Mejia
+Creation Date: 4,20,2025
 
 
 License
