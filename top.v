@@ -2,8 +2,8 @@
 //////////////////////////////////////////////////////////////////////////////////
 // Engineer: Walid Al-Muhtaseb
 // 
-// Create Date: 12/4/2025 01:54:30 PM
-// Design Name: Accelerator Top Module
+// Create Date: 10/4/2025 01:04:53 PM
+// Design Name: Top Module
 // Module Name: top
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -35,6 +35,9 @@ module merged_top(
 
     // Accelerometer Data (X[14:10], Y[9:5], Z[4:0])
     wire [14:0] acl_data;
+
+    // Game over signal
+    wire game_over;
 
     // Clock generation
     wire clk_4MHz;
@@ -110,7 +113,8 @@ module merged_top(
         .block_fill(block_fill),
         .xpos(xpos),
         .ypos(ypos),
-        .background(background)
+        .background(background),
+        .game_over(game_over)
     );
 
     // Pixel generator
@@ -121,6 +125,8 @@ module merged_top(
         .xpos(xpos),
         .ypos(ypos),
         .block_fill(block_fill),
+        .clk(CLK100MHZ),  // Add this line to pass the clock
+        .game_over(game_over),
         .rgb(rgb)
     );
 

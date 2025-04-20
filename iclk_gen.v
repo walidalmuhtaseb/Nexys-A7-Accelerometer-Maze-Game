@@ -1,7 +1,4 @@
 `timescale 1ns / 1ps
-// Created by David J. Marion
-// Date 7.22.2022
-// For NexysA7 Accelerometer Reading
 
 module iclk_gen(
     input CLK100MHZ,        // nexys a7 sys clk

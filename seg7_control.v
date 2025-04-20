@@ -1,7 +1,4 @@
 `timescale 1ns / 1ps
-// Created by David J. Marion
-// Date 7.22.2022
-// For NexysA7 Accelerometer Reading
 
 
 module seg7_control(

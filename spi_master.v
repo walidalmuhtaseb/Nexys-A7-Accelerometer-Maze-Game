@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-// Created by David J. Marion
+// Created by David J. Mario, huge thanks ti David for this part of the code 
 // For Nexys A7 3-Axis Accelerometer Reading
 // Last update: 4.17.2025 by Walid Al-Muhtaseb
 //
