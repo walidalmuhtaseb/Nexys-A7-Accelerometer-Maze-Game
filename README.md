@@ -76,3 +76,6 @@ Walid Al-Muhtaseb
 Sprite Creator:
 Roman Mejia
 Creation Date: 4,20,2025
+
+License
+This project is provided for educational purposes. Please check with the author for specific licensing details.
