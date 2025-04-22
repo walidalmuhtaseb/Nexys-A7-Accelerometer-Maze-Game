@@ -16,6 +16,7 @@ module pixel_gen(
     input block_fill,
     input clk,
     input game_over,
+    input level_up,
     output reg [11:0] rgb   
     );
     
@@ -80,6 +81,22 @@ module pixel_gen(
     parameter [9:0] WIN_ROW_12 = 10'b0111110000;
     parameter [9:0] WIN_ROW_13 = 10'b0000010000;
     parameter [9:0] WIN_ROW_14 = 10'b0000011111;
+
+    parameter [9:0] level_up_row_0 = 10'b1111111111;
+    parameter [9:0] level_up_row_1 = 10'b1000000001;
+    parameter [9:0] level_up_row_2 = 10'b1011010101;
+    parameter [9:0] level_up_row_3 = 10'b1010011101;
+    parameter [9:0] level_up_row_4 = 10'b1010011001;
+    parameter [9:0] level_up_row_5 = 10'b0010110000;
+    parameter [9:0] level_up_row_6 = 10'b1111101001;
+    parameter [9:0] level_up_row_7 = 10'b0011000000;
+    parameter [9:0] level_up_row_8 = 10'b1101101001;
+    parameter [9:0] level_up_row_9 = 10'b1011000111;
+    parameter [9:0] level_up_row_10 = 10'b1001010101;
+    parameter [9:0] level_up_row_11 = 10'b1001000101;
+    parameter [9:0] level_up_row_12 = 10'b1011101101;
+    parameter [9:0] level_up_row_13 = 10'b1000000001;
+    parameter [9:0] level_up_row_14 = 10'b1111111111;
     
 
     wire is_sprite;
@@ -111,6 +128,9 @@ module pixel_gen(
     wire is_goal;
     assign is_goal = (x >= MAZE_LEFT + 8*CELL_SIZE) && (x < MAZE_LEFT + 9*CELL_SIZE) && 
                      (y >= MAZE_TOP + 13*CELL_SIZE) && (y < MAZE_TOP + 14*CELL_SIZE);
+    wire is_goal2;
+    assign is_goal2 = (x >= MAZE_LEFT + 1*CELL_SIZE) && (x < MAZE_LEFT + 2*CELL_SIZE) && 
+                     (y >= MAZE_TOP + 7*CELL_SIZE) && (y < MAZE_TOP + 8*CELL_SIZE);
     
     // Function to check if a pixel is part of a maze wall
     function in_maze_wall;
@@ -147,6 +167,26 @@ module pixel_gen(
                         12: maze_row = WIN_ROW_12;
                         13: maze_row = WIN_ROW_13;
                         14: maze_row = WIN_ROW_14;
+                        default: maze_row = 10'b1111111111;
+                    endcase
+                end
+                else if (level_up) begin
+                    case (grid_y)
+                        0: maze_row = level_up_row_0;
+                        1: maze_row = level_up_row_1;
+                        2: maze_row = level_up_row_2;
+                        3: maze_row = level_up_row_3;
+                        4: maze_row = level_up_row_4;
+                        5: maze_row = level_up_row_5;
+                        6: maze_row = level_up_row_6;
+                        7: maze_row = level_up_row_7;
+                        8: maze_row = level_up_row_8;
+                        9: maze_row = level_up_row_9;
+                        10: maze_row = level_up_row_10;
+                        11: maze_row = level_up_row_11;
+                        12: maze_row = level_up_row_12;
+                        13: maze_row = level_up_row_13;
+                        14: maze_row = level_up_row_14;
                         default: maze_row = 10'b1111111111;
                     endcase
                 end
@@ -192,19 +232,31 @@ module pixel_gen(
             else
                 rgb = BLACK;  // Change background to black
         end
+        else if(level_up) begin // change background color when level up
+            if (block_fill)
+                rgb = USC_CARDINAL;  // Make the player sprite blue
+            else if (is_wall)
+                rgb = WALL;   // Change walls to red
+            else if(is_goal)
+                rgb=WHITE;
+            else if(is_goal2)
+                rgb = USC_GOLD; // Change goal to gold
+            else
+                rgb = BLACK;  // Change background to black
+        end
+        else if (is_sprite && sprite_color != 12'h000) // Check for non-black sprite pixels first
+            rgb = sprite_color;
         else if (block_fill)
             rgb = USC_CARDINAL;
         else if (is_goal)
             rgb = USC_GOLD;
         else if (is_wall)
             rgb = WALL;
-        else if (is_sprite && sprite_color != 12'h000) // Only display non-black sprite pixels
-            rgb = sprite_color;
         else if (x >= MAZE_LEFT && x < MAZE_LEFT + MAZE_WIDTH*CELL_SIZE &&
-                 y >= MAZE_TOP && y < MAZE_TOP + MAZE_HEIGHT*CELL_SIZE)
+                y >= MAZE_TOP && y < MAZE_TOP + MAZE_HEIGHT*CELL_SIZE)
             rgb = WHITE; // Maze paths
         else
-            rgb = BACKGROUND;
+            rgb = BACKGROUND; // Background color
     end
     
 endmodule

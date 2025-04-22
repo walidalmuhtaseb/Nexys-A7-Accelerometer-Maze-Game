@@ -39,6 +39,9 @@ module merged_top(
     // Game over signal
     wire game_over;
 
+    // next level signal
+    wire level_up;
+
     // Clock generation
     wire clk_4MHz;
     iclk_gen clkgen (
@@ -114,6 +117,7 @@ module merged_top(
         .xpos(xpos),
         .ypos(ypos),
         .background(background),
+        .level_up(level_up),
         .game_over(game_over)
     );
 
@@ -126,6 +130,7 @@ module merged_top(
         .ypos(ypos),
         .block_fill(block_fill),
         .clk(CLK100MHZ),  // Add this line to pass the clock
+        .level_up(level_up),
         .game_over(game_over),
         .rgb(rgb)
     );

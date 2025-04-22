@@ -16,6 +16,7 @@ module block_controller(
     output wire block_fill,
     output reg [9:0] xpos, ypos,
     output reg [11:0] background,
+    output reg level_up,
 	output reg game_over // for game end
    );
     
@@ -32,6 +33,9 @@ module block_controller(
 	// Goal position 
 	parameter GOAL_X = MAZE_LEFT + 8*CELL_SIZE + (CELL_SIZE/2);
 	parameter GOAL_Y = MAZE_TOP + 13*CELL_SIZE + (CELL_SIZE/2);
+
+    parameter GOAL_X2 = MAZE_LEFT + 1*CELL_SIZE + (CELL_SIZE/2);
+	parameter GOAL_Y2 = MAZE_TOP + 7*CELL_SIZE + (CELL_SIZE/2);
     
     // Compact maze representation - identical to pixel_gen.v
     parameter [9:0] MAZE_ROW_0 = 10'b1111111111;
@@ -65,6 +69,22 @@ module block_controller(
     parameter [9:0] WIN_ROW_12 = 10'b0111110000;
     parameter [9:0] WIN_ROW_13 = 10'b0000010000;
     parameter [9:0] WIN_ROW_14 = 10'b0000011111;
+
+    parameter [9:0] level_up_row_0 = 10'b1111111111;
+    parameter [9:0] level_up_row_1 = 10'b1000000001;
+    parameter [9:0] level_up_row_2 = 10'b1011010101;
+    parameter [9:0] level_up_row_3 = 10'b1010011101;
+    parameter [9:0] level_up_row_4 = 10'b1010011001;
+    parameter [9:0] level_up_row_5 = 10'b0010110000;
+    parameter [9:0] level_up_row_6 = 10'b1111101001;
+    parameter [9:0] level_up_row_7 = 10'b0011000000;
+    parameter [9:0] level_up_row_8 = 10'b1101101001;
+    parameter [9:0] level_up_row_9 = 10'b1011000111;
+    parameter [9:0] level_up_row_10 = 10'b1001010101;
+    parameter [9:0] level_up_row_11 = 10'b1001000101;
+    parameter [9:0] level_up_row_12 = 10'b1011101101;
+    parameter [9:0] level_up_row_13 = 10'b1000000001;
+    parameter [9:0] level_up_row_14 = 10'b1111111111;
     
     // Function to check if a position is in a wall
     function is_wall_at;
@@ -98,6 +118,26 @@ module block_controller(
                         12: maze_row = WIN_ROW_12;
                         13: maze_row = WIN_ROW_13;
                         14: maze_row = WIN_ROW_14;
+                        default: maze_row = 10'b1111111111;
+                    endcase
+                end
+                else if (level_up) begin
+                    case (grid_y)
+                        0: maze_row = level_up_row_0;
+                        1: maze_row = level_up_row_1;
+                        2: maze_row = level_up_row_2;
+                        3: maze_row = level_up_row_3;
+                        4: maze_row = level_up_row_4;
+                        5: maze_row = level_up_row_5;
+                        6: maze_row = level_up_row_6;
+                        7: maze_row = level_up_row_7;
+                        8: maze_row = level_up_row_8;
+                        9: maze_row = level_up_row_9;
+                        10: maze_row = level_up_row_10;
+                        11: maze_row = level_up_row_11;
+                        12: maze_row = level_up_row_12;
+                        13: maze_row = level_up_row_13;
+                        14: maze_row = level_up_row_14;
                         default: maze_row = 10'b1111111111;
                     endcase
                 end
@@ -185,8 +225,13 @@ module block_controller(
                 ypos <= next_ypos;
 
 				if ((next_xpos >= GOAL_X - (CELL_SIZE/2)) && (next_xpos <= GOAL_X + (CELL_SIZE/2)) &&
-					(next_ypos >= GOAL_Y - (CELL_SIZE/2)) && (next_ypos <= GOAL_Y + (CELL_SIZE/2))) begin
-					game_over <= 1;  // Set game over to true
+					(next_ypos >= GOAL_Y - (CELL_SIZE/2)) && (next_ypos <= GOAL_Y + (CELL_SIZE/2)) && !level_up) begin
+                    level_up <= 1; // Set level up signal to true
+					end
+                    // IMPO FIX THESE goal Y and Gola X
+                else if ((next_xpos >= GOAL_X2 - (CELL_SIZE/2)) && (next_xpos <= GOAL_X2 + (CELL_SIZE/2)) &&
+					(next_ypos >= GOAL_Y2 - (CELL_SIZE/2)) && (next_ypos <= GOAL_Y2 + (CELL_SIZE/2)) && level_up) begin
+                    game_over <= 1; // Set level up signal to true
 					end
             end
         end
