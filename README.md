@@ -71,10 +71,6 @@ Connect the VGA monitor
 Reset the game with BtnC
 Enjoy the game!
 
-Author:
-Walid Al-Muhtaseb
-Sprite Creator:
-Roman Mejia
 Creation Date: 4,20,2025
 
 License
